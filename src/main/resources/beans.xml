@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Define your beans here -->
+
+    <!-- Example bean -->
+    <bean id="student" class="com.spring.angular.fullstack.model.Student">
+        <constructor-arg ref="grades"/>
+    </bean>
+
+    <bean id="grades" class="com.spring.angular.fullstack.model.Grades">
+    </bean>
+
+</beans>
