@@ -1,6 +1,7 @@
 package com.spring.angular.fullstack.antihero.service;
 
 import com.spring.angular.fullstack.antihero.entity.AntiHeroEntity;
+import com.spring.angular.fullstack.antihero.exceptions.NotFoundException;
 import com.spring.angular.fullstack.antihero.repository.AntiHeroRepository;
 import com.spring.angular.fullstack.antihero.service.api.AntiHeroService;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class AntiHeroServiceImpl implements AntiHeroService {
     }
 
     @Override
-    public AntiHeroEntity findAntiHeroById(UUID id) {
-        return antiHeroRepository.findById(id).get();
+    public AntiHeroEntity findAntiHeroById(UUID id) throws NotFoundException {
+        return findByIdOrThrow(id);
     }
 
     @Override
@@ -38,7 +39,15 @@ public class AntiHeroServiceImpl implements AntiHeroService {
     }
 
     @Override
-    public void updateAntiHero(UUID id, AntiHeroEntity entity) {
+    public void updateAntiHero(UUID id, AntiHeroEntity entity)throws NotFoundException  {
+        findByIdOrThrow(id);
         antiHeroRepository.save(entity);
     }
+
+    private AntiHeroEntity findByIdOrThrow(UUID id) throws NotFoundException {
+        return antiHeroRepository.findById(id)
+                .orElseThrow(()->new NotFoundException("anti hero "+id+" was not found"));
+    }
+
+
 }
