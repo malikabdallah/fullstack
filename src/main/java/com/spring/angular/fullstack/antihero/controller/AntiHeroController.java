@@ -7,6 +7,7 @@ import com.spring.angular.fullstack.antihero.exceptions.NotFoundException;
 import com.spring.angular.fullstack.antihero.service.api.AntiHeroService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -62,6 +63,21 @@ public class AntiHeroController {
 
         return antiHeroList.
                 stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    @GetMapping("/paging")
+    public List<AntiHeroDTO> getAntiHeroPaging(Pageable pageable){
+        int toSkip = pageable.getPageSize() * pageable.getPageNumber();
+
+        var antiHeroList = StreamSupport.stream(antiHeroService.findAllAntiHero().spliterator(),false)
+                .skip(toSkip).limit(pageable.getPageSize())
+                .collect(Collectors.toList());
+
+        return antiHeroList
+                .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
